@@ -50,7 +50,9 @@ Screw.Unit(function(){
     before(function(){
       var button = $('a.ninja_search_activation:nth(0)');
       button.click();
-      $('input#person_user_time_zone_id_flexselect').keydown(); //trigger('keydown', [{keyCode: 27}]);
+      var e = $.Event('keyup');
+      e.keyCode = 27;
+      $('input#person_user_time_zone_id_flexselect').trigger(e);
     });
     it("should restore original select and selection if icon clicked again", function(){
       expect($('select#person_user_time_zone_id:visible').size()).to(equal, 1);
@@ -59,7 +61,7 @@ Screw.Unit(function(){
       expect($('input#person_user_time_zone_id_flexselect').size()).to(equal, 0);
     });
     it("should remove flexselect dropdown if icon clicked again", function(){
-      expect($('#person_user_time_zone_id_flexselect_dropdown').size()).to(equal, 0);
+      expect($('#person_user_time_zone_id_flexselect_dropdown:visible').size()).to(equal, 0);
     });
   });
   describe("selection", function(){
@@ -71,10 +73,10 @@ Screw.Unit(function(){
       expect($('select#person_user_time_zone_id:visible').size()).to(equal, 1);
     });
     it("should remove flexselect after selection from drop down", function(){
-      expect($('input#person_user_time_zone_id_flexselect').size()).to(equal, 0);
+      expect($('input#person_user_time_zone_id_flexselect:visible').size()).to(equal, 0);
     });
     it("should remove flexselect dropdown after selection from drop down", function(){
-      expect($('#person_user_time_zone_id_flexselect_dropdown').size()).to(equal, 0);
+      expect($('#person_user_time_zone_id_flexselect_dropdown:visible').size()).to(equal, 0);
     });
     it("should change select's selection after selection from drop down", function(){
       expect($('select#person_user_time_zone_id option:selected').val()).to(equal, 'Alaska');

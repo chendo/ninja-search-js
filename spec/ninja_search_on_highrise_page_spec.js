@@ -46,18 +46,20 @@ Screw.Unit(function(){
   });
   describe("deactivation by escaping", function(){
     before(function(){
-      var button = jQuery('.ninja_search_activation:nth(0)');
+      var button = jQuery('a.ninja_search_activation:nth(0)');
       button.click();
-      jQuery('input#person_user_time_zone_id_flexselect').keydown(); //trigger('keydown', [{keyCode: 27}]);
+      var e = jQuery.Event('keyup');
+      e.keyCode = 27;
+      $('input#person_user_time_zone_id_flexselect').trigger(e);
     });
     it("should restore original select and selection if icon clicked again", function(){
-      expect(jQuery('select#person_user_time_zone_id:visible').size()).to(equal, 1);
+      expect($('select#person_user_time_zone_id:visible').size()).to(equal, 1);
     });
     it("should remove flexselect if icon clicked again", function(){
-      expect(jQuery('input#person_user_time_zone_id_flexselect').size()).to(equal, 0);
+      expect($('input#person_user_time_zone_id_flexselect').size()).to(equal, 0);
     });
     it("should remove flexselect dropdown if icon clicked again", function(){
-      expect(jQuery('#person_user_time_zone_id_flexselect_dropdown').size()).to(equal, 0);
+      expect($('#person_user_time_zone_id_flexselect_dropdown:visible').size()).to(equal, 0);
     });
   });
   describe("selection", function(){
@@ -69,10 +71,10 @@ Screw.Unit(function(){
       expect(jQuery('select#person_user_time_zone_id:visible').size()).to(equal, 1);
     });
     it("should remove flexselect after selection from drop down", function(){
-      expect(jQuery('input#person_user_time_zone_id_flexselect').size()).to(equal, 0);
+      expect(jQuery('input#person_user_time_zone_id_flexselect:visible').size()).to(equal, 0);
     });
     it("should remove flexselect dropdown after selection from drop down", function(){
-      expect(jQuery('#person_user_time_zone_id_flexselect_dropdown').size()).to(equal, 0);
+      expect(jQuery('#person_user_time_zone_id_flexselect_dropdown:visible').size()).to(equal, 0);
     });
     it("should change select's selection after selection from drop down", function(){
       expect(jQuery('select#person_user_time_zone_id option:selected').val()).to(equal, 'Alaska');
