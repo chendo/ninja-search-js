@@ -1,7 +1,8 @@
 (function($){ 
   $(function() {
     $('select').each(function(index) {
-      if ($(this).find("option").size() <= 5) return false;
+      // no need for this anymore
+      // if ($(this).find("option").size() <= 5) return false;
       
       // if <select> has no id attribute, then give it one based on name attribute
       var id = $(this).attr('id');
@@ -41,6 +42,39 @@
           }
         });
       }
+      
+      $(this).mousedown(function (e) {
+        e.preventDefault();
+        id = $(this).attr('id');
+          $('#' + id).next('a').click();
+      });
+      // add keydown handler for select to automatically activate
+      $(this).keypress(function (e) {
+        var selectId = $(this).attr('id');
+        var selectField = $(this);
+        var flexField = $('input#' + selectId + '_flexselect');
+        if (flexField.size() == 0) {
+          var width = selectField.width();
+          selectField.flexselect();
+          flexField = $('input#' + selectId + '_flexselect');
+          flexField.width(width);
+        } else {
+          flexField.remove();
+          $('#' + selectId + '_flexselect_dropdown').remove();
+          selectField.show();
+        }
+        
+        str = String.fromCharCode(e.charCode || e.keyCode);
+        if (!e.shift) {
+          str = str.toLowerCase();
+        }
+
+        flexField = $('input#' + selectId + '_flexselect');
+        var e = $.Event('focus');
+        e.noSelect = true;
+        e.noSave = true;
+        flexField.click().val(str).trigger(e);
+      });
     });
     return false;
   });

@@ -6,9 +6,9 @@ Screw.Unit(function(){
     it("should display Ninja Search image button", function(){
       expect($('a.ninja_search_activation').size()).to(be_gte, 1);
     });
-    it("should not display Ninja Search if <= 5 items", function(){
-      expect($('a.ninja_search_activation[rel="small-list"]').size()).to(equal, 0);
-    });
+    // it("should not display Ninja Search if <= 5 items", function(){
+    //   expect($('a.ninja_search_activation[rel="small-list"]').size()).to(equal, 0);
+    // });
   });
   describe("activation", function(){
     before(function(){
@@ -28,6 +28,35 @@ Screw.Unit(function(){
     });
     it("should hide the original select element", function(){
       expect($('select#person_user_time_zone_id:visible').size()).to(equal, 0);
+    });
+  });
+  describe("activation via keybind", function(){
+    before(function(){
+      var e = $.Event('keypress');
+      e.keyCode = 65; // A
+      e.shift = false;
+      $('#person_user_time_zone_id').trigger(e);
+    });
+    after(function(){
+      $('a.ninja_search_activation:nth(0)').click();
+    });
+    it("should render a flexselect input", function(){
+      expect($('input#person_user_time_zone_id_flexselect').size()).to(equal, 1);
+    });
+    it("should resize the flexselect input to size of original select", function(){
+      expect($('input#person_user_time_zone_id_flexselect').width()).to(be_gte, 239);
+    });
+    it("should retain the original select element", function(){
+      expect($('select#person_user_time_zone_id').size()).to(equal, 1);
+    });
+    it("should hide the original select element", function(){
+      expect($('select#person_user_time_zone_id:visible').size()).to(equal, 0);
+    });
+    it("should enter the character into the input", function(){
+      expect($('input#person_user_time_zone_id_flexselect').val()).to(equal, 'a');
+    });
+    it("should show drop down", function(){
+      expect($('div#person_user_time_zone_id_flexselect_dropdown:visible').size()).to(equal, 1);
     });
   });
   describe("deactivation by clicking", function(){
@@ -53,6 +82,22 @@ Screw.Unit(function(){
       var e = $.Event('keyup');
       e.keyCode = 27;
       $('input#person_user_time_zone_id_flexselect').trigger(e);
+    });
+    it("should restore original select and selection if icon clicked again", function(){
+      expect($('select#person_user_time_zone_id:visible').size()).to(equal, 1);
+    });
+    it("should remove flexselect if icon clicked again", function(){
+      expect($('input#person_user_time_zone_id_flexselect').size()).to(equal, 0);
+    });
+    it("should remove flexselect dropdown if icon clicked again", function(){
+      expect($('#person_user_time_zone_id_flexselect_dropdown:visible').size()).to(equal, 0);
+    });
+  });
+  describe("deactivation by unfocusing", function(){
+    before(function(){
+      var button = $('a.ninja_search_activation:nth(0)');
+      button.click();
+      $('input#person_user_time_zone_id_flexselect').blur();
     });
     it("should restore original select and selection if icon clicked again", function(){
       expect($('select#person_user_time_zone_id:visible').size()).to(equal, 1);

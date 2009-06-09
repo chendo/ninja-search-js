@@ -92,16 +92,24 @@
         event.preventDefault();
       });
 
-      this.input.focus(function() {
-        self.abbreviationBeforeFocus = self.input.val();
-        self.input.select();
+      this.input.focus(function(e) {
+        if (!e.noSave) {
+          self.abbreviationBeforeFocus = self.input.val();
+        }
+        if (!e.noSelect) {
+          self.input.select();
+        }
         if (!self.picked) self.filterResults();
       });
 
       this.input.blur(function() {
         if (!self.dropdownMouseover) {
           self.hide();
-          if (!self.picked) self.reset();
+          if (!self.picked) {
+            self.reset();
+            self.revert();
+            self.focusAndHide();
+          }
         }
       });
 
